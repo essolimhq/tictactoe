@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:tictactoe/features/game/presentation/widgets/board_cell.dart';
 
 class Gameboard extends StatelessWidget {
   const Gameboard({super.key});
@@ -34,30 +36,12 @@ class Gameboard extends StatelessWidget {
               ),
               itemCount: 9,
               itemBuilder: (context, index) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.1),
-                      width: 1,
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      index == 0
-                          ? 'X'
-                          : index == 4
-                              ? 'O'
-                              : '',
-                      style: TextStyle(
-                        fontSize: 48,
-                        fontWeight: FontWeight.w200,
-                        color: index == 0 ? const Color(0xFFDC0000) : Colors.white,
-                      ),
-                    ),
-                  ),
-                );
+                final delay = (index * 50).ms;
+
+                return BoardCell(index: index)
+                    .animate()
+                    .fadeIn(duration: 300.ms, delay: delay)
+                    .scale(begin: const Offset(0.8, 0.8), delay: delay);
               },
             ),
           ),

@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/dart,flutter,jetbrains+all,macos,android,androidstudio,xcode,swift,kotlin
 # Edit at https://www.toptal.com/developers/gitignore?templates=dart,flutter,jetbrains+all,macos,android,androidstudio,xcode,swift,kotlin
 
+*.freezed.dart
+*.g.dart
+
 ### Android ###
 # Gradle files
 .gradle/

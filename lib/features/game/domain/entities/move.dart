@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:tictactoe/features/game/domain/entities/game_state.dart';
+import 'package:tictactoe/features/game/domain/entities/player.dart';
 
 part 'move.freezed.dart';
 

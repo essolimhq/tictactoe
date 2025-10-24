@@ -18,9 +18,9 @@ class MenuScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       body: Consumer(
         builder: (context, ref, _) {
-          ref.listen(gameControllerProvider, (_, state) {
-            if (state.status == GameStatus.playing) {
-              context.pushNamed(GameScreen.routeName);
+          ref.listen(gameControllerProvider.select((provider) => provider.status), (_, status) {
+            if (status == GameStatus.playing) {
+              context.goNamed(GameScreen.routeName);
             }
           });
 

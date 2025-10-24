@@ -17,7 +17,7 @@ class GameScreen extends StatelessWidget {
           children: [
             ScoreBoard(),
             Spacer(),
-            Gameboard(),
+            const Gameboard(),
             Spacer(),
           ],
         ),
