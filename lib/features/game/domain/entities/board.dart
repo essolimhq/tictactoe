@@ -31,4 +31,6 @@ abstract class Board with _$Board {
 
   List<int> get emptyIndices =>
       cells.asMap().entries.where((e) => e.value.isEmpty).map((e) => e.key).toList();
+
+  List<Player> get emptyPositions => cells.where((cell) => cell.isEmpty).toList();
 }

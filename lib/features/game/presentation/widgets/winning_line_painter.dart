@@ -2,48 +2,51 @@ import 'package:flutter/material.dart';
 
 class WinningLinePainter extends CustomPainter {
   final List<int>? winningLine;
-  final Animation<double> progress;
+  final double progress;
 
   WinningLinePainter({
     required this.winningLine,
     required this.progress,
-  }) : super(repaint: progress);
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (winningLine == null) return;
+    if (winningLine == null || progress == 0) return;
 
-    final cellSize = size.width / 3;
+    const spacing = 8.0;
+    final cellSize = (size.width - spacing * 2) / 3;
+
+    final start = _getCenter(winningLine![0], cellSize, spacing);
+    final end = _getCenter(winningLine![2], cellSize, spacing);
+    final current = Offset.lerp(start, end, progress)!;
+
+    // Glow
+    final glowPaint = Paint()
+      ..color = const Color(0xFF00d4ff).withValues(alpha: 0.3)
+      ..strokeWidth = 24
+      ..strokeCap = StrokeCap.round
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 15);
+    canvas.drawLine(start, current, glowPaint);
+
+    // Main line
     final paint = Paint()
-      ..color = Colors.white
       ..strokeWidth = 8
       ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.stroke
-      ..shader = LinearGradient(
+      ..shader = const LinearGradient(
         colors: [Color(0xFF00d4ff), Colors.white, Color(0xFF00d4ff)],
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
-
-    // Calculate start and end points
-    Offset start = _getCellCenter(winningLine![0], cellSize);
-    Offset end = _getCellCenter(winningLine![2], cellSize);
-
-    // Animate the line
-    Offset currentEnd = Offset.lerp(start, end, progress.value)!;
-
-    canvas.drawLine(start, currentEnd, paint);
+    canvas.drawLine(start, current, paint);
   }
 
-  Offset _getCellCenter(int index, double cellSize) {
-    int row = index ~/ 3;
-    int col = index % 3;
-    return Offset(
-      col * cellSize + cellSize / 2,
-      row * cellSize + cellSize / 2,
-    );
+  Offset _getCenter(int index, double cellSize, double spacing) {
+    final row = index ~/ 3;
+    final col = index % 3;
+    final x = col * (cellSize + spacing) + cellSize / 2;
+    final y = row * (cellSize + spacing) + cellSize / 2;
+    return Offset(x, y);
   }
 
   @override
-  bool shouldRepaint(WinningLinePainter oldDelegate) {
-    return oldDelegate.winningLine != winningLine || oldDelegate.progress != progress;
-  }
+  bool shouldRepaint(WinningLinePainter old) =>
+      old.winningLine != winningLine || old.progress != progress;
 }

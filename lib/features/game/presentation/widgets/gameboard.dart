@@ -2,6 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tictactoe/features/game/presentation/providers/game_controller_provider.dart';
+import 'package:tictactoe/features/game/presentation/widgets/animated_winning_line.dart';
 import 'package:tictactoe/features/game/presentation/widgets/board_cell.dart';
 
 class Gameboard extends StatelessWidget {
@@ -27,23 +30,31 @@ class Gameboard extends StatelessWidget {
                 width: 1,
               ),
             ),
-            child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
-              ),
-              itemCount: 9,
-              itemBuilder: (context, index) {
-                final delay = (index * 50).ms;
+            child: Consumer(builder: (context, ref, _) {
+              return AnimatedWinningLine(
+                winningLine: ref
+                    .watch(gameControllerProvider.select((p) => p.winningLine))
+                    ?.map((e) => e.index)
+                    .toList(),
+                child: GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                  ),
+                  itemCount: 9,
+                  itemBuilder: (context, index) {
+                    final delay = (index * 50).ms;
 
-                return BoardCell(index: index)
-                    .animate()
-                    .fadeIn(duration: 300.ms, delay: delay)
-                    .scale(begin: const Offset(0.8, 0.8), delay: delay);
-              },
-            ),
+                    return BoardCell(index: index)
+                        .animate()
+                        .fadeIn(duration: 300.ms, delay: delay)
+                        .scale(begin: const Offset(0.8, 0.8), delay: delay);
+                  },
+                ),
+              );
+            }),
           ),
         ),
       ),

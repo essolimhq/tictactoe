@@ -4,6 +4,7 @@ import 'package:tictactoe/features/game/domain/entities/board.dart';
 import 'package:tictactoe/features/game/domain/entities/game_status.dart';
 import 'package:tictactoe/features/game/domain/entities/move.dart';
 import 'package:tictactoe/features/game/domain/entities/player.dart';
+import 'package:tictactoe/features/game/domain/entities/position.dart';
 
 part 'game_state.freezed.dart';
 
@@ -14,7 +15,7 @@ abstract class GameState with _$GameState {
     required Player currentPlayer,
     required GameStatus status,
     Player? winner,
-    @Default([]) List<int> winningCells,
+    List<Position>? winningLine,
     required int xScore,
     required int oScore,
     required GameMode gameMode,
@@ -31,14 +32,3 @@ abstract class GameState with _$GameState {
         gameMode: GameMode.vsAI,
       );
 }
-
-const List<List<int>> winningCombinations = [
-  [0, 1, 2], // Top row
-  [3, 4, 5], // Middle row
-  [6, 7, 8], // Bottom row
-  [0, 3, 6], // Left column
-  [1, 4, 7], // Middle column
-  [2, 5, 8], // Right column
-  [0, 4, 8], // Diagonal \
-  [2, 4, 6], // Diagonal /
-];

@@ -8,11 +8,11 @@ abstract class GameStatus with _$GameStatus {
 
   const factory GameStatus.playing() = Playing;
   const factory GameStatus.win() = Win;
-  const factory GameStatus.draw() = Draw;
+  const factory GameStatus.isDraw() = IsDraw;
   const factory GameStatus.menu() = Menu;
 
   bool get isPlaying => this is Playing;
   bool get isWin => this is Win;
-  bool get isDraw => this is Draw;
+  bool get isDraw => this is IsDraw;
   bool get isInMenu => this is Menu;
 }

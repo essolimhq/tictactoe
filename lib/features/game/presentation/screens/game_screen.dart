@@ -17,19 +17,19 @@ class GameScreen extends StatelessWidget {
       ref.listen(
         gameControllerProvider.select((provider) => provider.status),
         (_, GameStatus gameStatus) {
-          if (gameStatus is Win) {
-            showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return SizedBox(
-                  height: 200,
-                  child: Center(
-                    child: Text('This is a Modal Bottom Sheet'),
-                  ),
-                );
-              },
-            );
-          }
+          // if (gameStatus is Win) {
+          //   showModalBottomSheet(
+          //     context: context,
+          //     builder: (BuildContext context) {
+          //       return SizedBox(
+          //         height: 200,
+          //         child: Center(
+          //           child: Text('This is a Modal Bottom Sheet'),
+          //         ),
+          //       );
+          //     },
+          //   );
+          // }
         },
       );
 
@@ -42,7 +42,7 @@ class GameScreen extends StatelessWidget {
               Consumer(builder: (context, ref, _) {
                 return Text(
                   ref.watch(gameControllerProvider).winner?.symbol ?? "",
-                  style: TextStyle(fontSize: 40),
+                  style: TextStyle(fontSize: 40, color: Colors.amber),
                 );
               }),
               Spacer(),
