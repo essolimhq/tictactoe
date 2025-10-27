@@ -19,7 +19,7 @@ class MenuScreen extends StatelessWidget {
       body: Consumer(
         builder: (context, ref, _) {
           ref.listen(gameControllerProvider.select((provider) => provider.status), (_, status) {
-            if (status == GameStatus.playing) {
+            if (status.isPlaying) {
               context.goNamed(GameScreen.routeName);
             }
           });

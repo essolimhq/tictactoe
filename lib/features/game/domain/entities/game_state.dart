@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:tictactoe/core/enums/game_enums.dart';
+import 'package:tictactoe/features/game/domain/entities/board.dart';
+import 'package:tictactoe/features/game/domain/entities/game_status.dart';
 import 'package:tictactoe/features/game/domain/entities/move.dart';
 import 'package:tictactoe/features/game/domain/entities/player.dart';
 
@@ -8,7 +10,7 @@ part 'game_state.freezed.dart';
 @freezed
 abstract class GameState with _$GameState {
   const factory GameState({
-    required List<Player> board,
+    required Board board,
     required Player currentPlayer,
     required GameStatus status,
     Player? winner,
@@ -20,28 +22,15 @@ abstract class GameState with _$GameState {
     @Default([]) List<Move> moveHistory,
   }) = _GameState;
 
-  factory GameState.initial() => const GameState(
-        board: [
-          Player.none(), Player.none(), Player.none(), // prevent break
-          Player.none(), Player.none(), Player.none(),
-          Player.none(), Player.none(), Player.none(),
-        ],
+  factory GameState.initial() => GameState(
+        board: Board.empty(),
         currentPlayer: Player.x(),
-        status: GameStatus.menu,
+        status: GameStatus.menu(),
         xScore: 0,
         oScore: 0,
         gameMode: GameMode.vsAI,
       );
 }
-
-// enum Player {
-//   x('X'),
-//   o('O'),
-//   none()('');
-//
-//   final String mark;
-//   const Player(this.mark);
-// }
 
 const List<List<int>> winningCombinations = [
   [0, 1, 2], // Top row
