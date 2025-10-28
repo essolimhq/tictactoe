@@ -9,35 +9,40 @@ abstract class Position with _$Position {
   const factory Position({
     required int row,
     required int col,
+    @Default(3) int boardSize,
   }) = _Position;
 
-  factory Position.fromIndex(int index) {
-    assert(index >= 0 && index < 9, 'Index must be between 0 and 8');
+  factory Position.fromIndex(int index, {int boardSize = 3}) {
+    assert(index >= 0 && index < boardSize * boardSize,
+        'Index must be between 0 and ${boardSize * boardSize - 1}');
     return Position(
-      row: index ~/ 3,
-      col: index % 3,
+      row: index ~/ boardSize,
+      col: index % boardSize,
+      boardSize: boardSize,
     );
   }
 
-  int get index => row * 3 + col;
+  int get index => row * boardSize + col;
 
-  bool get isValid => index >= 0 && index < 9;
+  bool get isValid {
+    return row >= 0 && row < boardSize && col >= 0 && col < boardSize;
+  }
 
-  bool get isCenter => index == 4;
+  bool get isCenter {
+    final center = boardSize ~/ 2;
+    return row == center && col == center;
+  }
 
-  bool get isCorner => [0, 2, 6, 8].contains(index);
+  bool get isCorner {
+    return (row == 0 || row == boardSize - 1) && (col == 0 || col == boardSize - 1);
+  }
 
-  bool get isEdge => [1, 3, 5, 7].contains(index);
+  bool get isEdge {
+    final onBorder = row == 0 || row == boardSize - 1 || col == 0 || col == boardSize - 1;
+    return onBorder && !isCorner && !isCenter;
+  }
 
   bool get isDiagonal => row == col;
 
-  bool get isAntiDiagonal => row + col == 3 - 1;
-
-  Position get nextCell => Position.fromIndex(index + 1);
-
-  Position get previousCell => Position.fromIndex(index - 1);
-
-  Position get nextColumn => Position.fromIndex(index + 3);
-
-  Position get previousColumn => Position.fromIndex(index + 6);
+  bool get isAntiDiagonal => row + col == boardSize - 1;
 }

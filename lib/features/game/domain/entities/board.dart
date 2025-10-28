@@ -12,6 +12,8 @@ abstract class Board with _$Board {
 
   const factory Board({
     required List<Player> cells,
+    @Default(3) int size,
+    @Default(3) int winningLength,
     @Default([]) List<Move> moves,
     @Default(GameStatus.menu()) GameStatus status,
     @Default([]) List<int> winningLine,
@@ -20,8 +22,23 @@ abstract class Board with _$Board {
   factory Board.empty() {
     return Board(
       cells: List.filled(9, const Player.none()),
+      size: 3,
+      winningLength: 3,
     );
   }
+
+  factory Board.withSize({
+    required int size,
+    int? winningLength,
+  }) {
+    return Board(
+      cells: List.filled(size * size, const Player.none()),
+      size: size,
+      winningLength: winningLength ?? size,
+    );
+  }
+
+  int get totalCells => size * size;
 
   Player at(Position pos) => cells[pos.index];
 
@@ -33,4 +50,6 @@ abstract class Board with _$Board {
       cells.asMap().entries.where((e) => e.value.isEmpty).map((e) => e.key).toList();
 
   List<Player> get emptyPositions => cells.where((cell) => cell.isEmpty).toList();
+
+  bool get isFull => emptyIndices.isEmpty;
 }
