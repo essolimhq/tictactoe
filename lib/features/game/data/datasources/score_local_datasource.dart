@@ -7,10 +7,10 @@ import 'package:tictactoe/features/game/data/datasources/abstracts/score_datasou
 ///
 /// This datasource depends on the Storage interface, not on Hive directly,
 /// making it fully testable and swappable.
-class ScoreLocalDataSource implements ScoreDataSource {
+class LocalStatsSavingDataSource implements ScoreDataSource {
   final Storage _storage;
 
-  ScoreLocalDataSource(this._storage);
+  LocalStatsSavingDataSource(this._storage);
 
   @override
   Future<Either<Exception, Unit>> saveScores({

@@ -5,13 +5,15 @@ import 'package:tictactoe/features/game/domain/entities/board.dart';
 import 'package:tictactoe/features/game/domain/entities/player.dart';
 import 'package:tictactoe/features/game/domain/entities/position.dart';
 import 'package:tictactoe/features/game/domain/errors/game_errors.dart';
+import 'package:tictactoe/features/game/domain/services/abstracts/winner_detection_service.dart';
 import 'package:tictactoe/features/game/domain/strategies/abstracts/ai_strategy.dart';
 
 /// Heuristic-based AI strategy for easy difficulty.
 class HeuristicStrategy implements AIStrategy {
   final Random _random;
 
-  HeuristicStrategy({Random? random}) : _random = random ?? Random();
+  HeuristicStrategy(WinnerDetectionService winnerDetectionService, {Random? random})
+      : _random = random ?? Random();
 
   @override
   Either<GameError, Position> findBestMove(Board board, Player aiPlayer) {

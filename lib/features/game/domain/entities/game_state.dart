@@ -18,6 +18,7 @@ abstract class GameState with _$GameState {
     List<Position>? winningLine,
     required int xScore,
     required int oScore,
+    String? error,
     required GameMode gameMode,
     @Default(AIDifficulty.easy) AIDifficulty aiDifficulty,
     @Default([]) List<Move> moveHistory,

@@ -5,10 +5,10 @@ import 'package:tictactoe/features/game/data/datasources/abstracts/game_state_da
 import 'package:tictactoe/features/game/data/models/game_state_model.dart';
 
 /// Local implementation using Storage abstraction for game state persistence.
-class GameStateLocalDataSource implements GameStateDataSource {
+class LocalGameSavingDataSource implements GameStateDataSource {
   final Storage _storage;
 
-  GameStateLocalDataSource(this._storage);
+  LocalGameSavingDataSource(this._storage);
 
   @override
   Future<Either<Exception, Unit>> saveGameState(GameStateModel gameState) async {

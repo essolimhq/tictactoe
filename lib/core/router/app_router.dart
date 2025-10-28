@@ -15,12 +15,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
-        path: '/game',
-        name: GameScreen.routeName,
-        builder: (context, state) {
-          return const GameScreen();
-        },
-      )
+          path: '/game',
+          name: GameScreen.routeName,
+          builder: (context, state) {
+            return const GameScreen();
+          })
     ],
   );
 });
