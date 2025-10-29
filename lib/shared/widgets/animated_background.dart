@@ -33,7 +33,7 @@ class _FloatingShapesBackgroundState extends State<AnimatedBackground>
     _shapes = [];
     _controllers = [];
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 10; i++) {
       final controller = AnimationController(
         duration: Duration(seconds: 20 + i * 5),
         vsync: this,
@@ -70,7 +70,10 @@ class _FloatingShapesBackgroundState extends State<AnimatedBackground>
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Color(0xFF000000), Color(0xFF1A1A1A)],
+              colors: [
+                Color(0xFF4A90E2), // Soft blue
+                Color(0xFF7B68EE), // Medium slate blue
+              ],
             ),
           ),
         ),
