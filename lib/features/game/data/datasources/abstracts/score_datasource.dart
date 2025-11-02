@@ -1,16 +1,16 @@
-import 'package:fpdart/fpdart.dart';
+import 'package:tictactoe/features/game/data/models/score_model.dart';
 
 /// Data source interface for score persistence.
 abstract class ScoreDataSource {
   /// Saves scores to storage.
-  Future<Either<Exception, Unit>> saveScores({
-    required int xScore,
-    required int oScore,
-  });
+  Future<void> saveScores(ScoreModel score);
 
   /// Loads scores from storage.
-  Future<Either<Exception, Option<({int xScore, int oScore})>>> loadScores();
+  Future<ScoreModel> loadScores();
+
+  /// Check if exist
+  Future<bool> exist();
 
   /// Resets scores to zero.
-  Future<Either<Exception, Unit>> resetScores();
+  Future<void> resetScores();
 }

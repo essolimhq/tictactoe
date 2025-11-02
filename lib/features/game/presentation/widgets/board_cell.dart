@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tictactoe/core/design_system/tokens/app_colors.dart';
 import 'package:tictactoe/features/game/domain/entities/position.dart';
-import 'package:tictactoe/features/game/presentation/providers/game_controller_provider.dart';
 import 'package:tictactoe/features/game/presentation/widgets/cell_symbol.dart';
+import 'package:tictactoe/features/game/providers/game_controller_provider.dart';
 
 class BoardCell extends StatelessWidget {
   final int index;

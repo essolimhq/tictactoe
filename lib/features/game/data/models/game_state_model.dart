@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:tictactoe/core/enums/game_enums.dart';
 import 'package:tictactoe/features/game/data/models/board_model.dart';
+import 'package:tictactoe/features/game/data/models/score_model.dart';
 import 'package:tictactoe/features/game/domain/entities/game_state.dart';
 import 'package:tictactoe/features/game/domain/entities/game_status.dart';
 import 'package:tictactoe/features/game/domain/entities/player.dart';
@@ -17,8 +18,7 @@ abstract class GameStateModel with _$GameStateModel {
     required Map<String, dynamic> currentPlayer,
     required String status,
     Map<String, dynamic>? winner,
-    required int xScore,
-    required int oScore,
+    required ScoreModel score,
     required String gameMode,
     @Default('easy') String aiDifficulty,
   }) = _GameStateModel;
@@ -30,8 +30,7 @@ abstract class GameStateModel with _$GameStateModel {
         currentPlayer: Player.fromJson(currentPlayer),
         status: _statusFromString(status),
         winner: winner != null ? Player.fromJson(winner!) : null,
-        xScore: xScore,
-        oScore: oScore,
+        score: score.toEntity(),
         gameMode: _gameModeFromString(gameMode),
         aiDifficulty: _aiDifficultyFromString(aiDifficulty),
       );
@@ -40,14 +39,13 @@ abstract class GameStateModel with _$GameStateModel {
         board: BoardModel.fromEntity(state.board),
         currentPlayer: state.currentPlayer.toJson(),
         status: state.status.when(
-          menu: () => 'menu',
+          inMenu: () => 'menu',
           playing: () => 'playing',
-          win: () => 'win',
+          hasWin: () => 'win',
           isDraw: () => 'draw',
         ),
         winner: state.winner?.toJson(),
-        xScore: state.xScore,
-        oScore: state.oScore,
+        score: ScoreModel.fromEntity(state.score),
         gameMode: state.gameMode.name,
         aiDifficulty: state.aiDifficulty.name,
       );
@@ -55,15 +53,15 @@ abstract class GameStateModel with _$GameStateModel {
   GameStatus _statusFromString(String status) {
     switch (status) {
       case 'menu':
-        return const GameStatus.menu();
+        return const Menu();
       case 'playing':
         return const GameStatus.playing();
       case 'win':
-        return const GameStatus.win();
+        return const GameStatus.hasWin();
       case 'draw':
         return const GameStatus.isDraw();
       default:
-        return const GameStatus.menu();
+        return const Menu();
     }
   }
 

@@ -15,7 +15,7 @@ abstract class Board with _$Board {
     @Default(3) int size,
     @Default(3) int winningLength,
     @Default([]) List<Move> moves,
-    @Default(GameStatus.menu()) GameStatus status,
+    @Default(Menu()) GameStatus status,
     @Default([]) List<int> winningLine,
   }) = _Board;
 

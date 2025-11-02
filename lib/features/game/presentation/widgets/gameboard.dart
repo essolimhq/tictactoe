@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tictactoe/features/game/presentation/providers/game_controller_provider.dart';
 import 'package:tictactoe/features/game/presentation/widgets/animated_winning_line.dart';
 import 'package:tictactoe/features/game/presentation/widgets/board_cell.dart';
+import 'package:tictactoe/features/game/providers/game_controller_provider.dart';
 
 class Gameboard extends StatelessWidget {
   const Gameboard({super.key});

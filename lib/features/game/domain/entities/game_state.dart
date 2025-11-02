@@ -5,6 +5,7 @@ import 'package:tictactoe/features/game/domain/entities/game_status.dart';
 import 'package:tictactoe/features/game/domain/entities/move.dart';
 import 'package:tictactoe/features/game/domain/entities/player.dart';
 import 'package:tictactoe/features/game/domain/entities/position.dart';
+import 'package:tictactoe/features/game/domain/entities/score.dart';
 
 part 'game_state.freezed.dart';
 
@@ -16,8 +17,7 @@ abstract class GameState with _$GameState {
     required GameStatus status,
     Player? winner,
     List<Position>? winningLine,
-    required int xScore,
-    required int oScore,
+    required Score score,
     String? error,
     required GameMode gameMode,
     @Default(AIDifficulty.easy) AIDifficulty aiDifficulty,
@@ -27,9 +27,8 @@ abstract class GameState with _$GameState {
   factory GameState.initial() => GameState(
         board: Board.empty(),
         currentPlayer: Player.x(),
-        status: GameStatus.menu(),
-        xScore: 0,
-        oScore: 0,
+        status: Menu(),
+        score: Score(x: 0, o: 0, draw: 0),
         gameMode: GameMode.vsAI,
       );
 }

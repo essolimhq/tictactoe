@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:tictactoe/core/design_system/tokens/app_colors.dart';
 
 class AnimatedBackground extends StatefulWidget {
   final Widget child;
@@ -10,8 +11,8 @@ class AnimatedBackground extends StatefulWidget {
   const AnimatedBackground({
     super.key,
     required this.child,
-    this.primaryColor = const Color(0xFFDC0000),
-    this.secondaryColor = const Color(0xFFA00000),
+    this.primaryColor = AppColors.primary,
+    this.secondaryColor = AppColors.primary,
   });
 
   @override
@@ -66,17 +67,17 @@ class _FloatingShapesBackgroundState extends State<AnimatedBackground>
     return Stack(
       children: [
         Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF4A90E2), // Soft blue
-                Color(0xFF7B68EE), // Medium slate blue
-              ],
+            // decoration: const BoxDecoration(
+            //   gradient: LinearGradient(
+            //     begin: Alignment.topLeft,
+            //     end: Alignment.bottomRight,
+            //     colors: [
+            //       Color(0xFF4A90E2), // Soft blue
+            //       Color(0xFF7B68EE), // Medium slate blue
+            //     ],
+            //   ),
+            // ),
             ),
-          ),
-        ),
         ..._shapes.map(
           (shape) => AnimatedBuilder(
             animation: shape.controller,
@@ -95,7 +96,7 @@ class _FloatingShapesBackgroundState extends State<AnimatedBackground>
                     shape: BoxShape.circle,
                     gradient: RadialGradient(
                       colors: [
-                        shape.color.withValues(alpha: 0.3),
+                        shape.color.withValues(alpha: 0.2),
                         shape.color.withValues(alpha: 0.1),
                         Colors.transparent,
                       ],

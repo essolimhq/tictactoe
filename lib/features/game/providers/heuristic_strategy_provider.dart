@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tictactoe/features/game/domain/strategies/abstracts/ai_strategy.dart';
 import 'package:tictactoe/features/game/domain/strategies/heuristic_strategy.dart';
-import 'package:tictactoe/features/game/presentation/providers/winner_detection_service_provider.dart';
+import 'package:tictactoe/features/game/providers/winner_detection_service_provider.dart';
 
 part 'heuristic_strategy_provider.g.dart';
 

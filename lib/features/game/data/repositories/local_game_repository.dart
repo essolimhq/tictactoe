@@ -1,4 +1,3 @@
-import 'package:fpdart/fpdart.dart';
 import 'package:tictactoe/features/game/data/datasources/abstracts/game_state_datasource.dart';
 import 'package:tictactoe/features/game/data/models/game_state_model.dart';
 import 'package:tictactoe/features/game/domain/abstracts/repositories/game_repository.dart';
@@ -11,27 +10,25 @@ class LocalGameRepository implements GameRepository {
   LocalGameRepository(this._dataSource);
 
   @override
-  Future<Either<Exception, Unit>> saveGameState(GameState state) async {
-    try {
-      final model = GameStateModel.fromEntity(state);
-      return await _dataSource.saveGameState(model);
-    } catch (e) {
-      return left(Exception('Failed to save game state in repository: $e'));
-    }
+  Future<void> saveGameState(GameState state) async {
+    final model = GameStateModel.fromEntity(state);
+    await _dataSource.saveGameState(model);
   }
 
   @override
-  Future<Either<Exception, Option<GameState>>> loadGameState() async {
-    return (await _dataSource.loadGameState()).fold(
-      (error) => left(error),
-      (optionModel) => right(
-        optionModel.map((model) => model.toEntity()),
-      ),
-    );
+  Future<GameState> loadGameState() async {
+    final gameStateModel = await _dataSource.loadGameState();
+
+    return gameStateModel.toEntity();
   }
 
   @override
-  Future<Either<Exception, Unit>> deleteGameState() async {
+  Future<void> deleteGameState() async {
     return await _dataSource.deleteGameState();
+  }
+
+  @override
+  Future<bool> gameStateExist() async {
+    return await _dataSource.isSavedGameExist();
   }
 }

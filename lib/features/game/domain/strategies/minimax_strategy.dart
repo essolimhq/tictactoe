@@ -34,7 +34,7 @@ class MinimaxStrategy implements AIStrategy {
       final score = _minimax(
         simulatedBoard,
         position,
-        false, // Next move would be opponent's (minimizing)
+        false,
         aiPlayer,
       );
 
@@ -54,7 +54,7 @@ class MinimaxStrategy implements AIStrategy {
     bool isMaximizing,
     Player aiPlayer,
   ) {
-    final lastMovedPlayer = isMaximizing ? aiPlayer : aiPlayer.opposite;
+    final lastMovedPlayer = isMaximizing ? aiPlayer.opposite : aiPlayer;
 
     final winnerStatus = _winnerDetectionService.checkWinner(
       board,

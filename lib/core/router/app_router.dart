@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tictactoe/features/game/presentation/screens/game_screen.dart';
-import 'package:tictactoe/features/menu/presentation/screens/menu_screen.dart';
+import 'package:tictactoe/features/game/presentation/screens/menu_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(

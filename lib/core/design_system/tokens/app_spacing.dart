@@ -10,6 +10,9 @@ abstract class AppSpacing {
   static const double xxl = 48.0; // 48px
   static const double xxxl = 64.0; // 64px
 
+  // TODO: Créer une widget et fournir une valeur pour créer dynamiquement le spacing
+  // K : pour définir les constantes
+  // Définir le design system dans le Readme
   static Widget get h2xs => const SizedBox(height: xxs);
   static Widget get hXs => const SizedBox(height: xs);
   static Widget get hSm => const SizedBox(height: sm);

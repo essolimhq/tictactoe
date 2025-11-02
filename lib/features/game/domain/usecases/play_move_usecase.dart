@@ -6,7 +6,6 @@ import 'package:tictactoe/features/game/domain/errors/game_errors.dart';
 
 /// Use case for playing a move on the board.
 class PlayMoveUseCase {
-  /// Executes a move at the given position.
   Either<GameError, Board> call(
     Board board,
     Position position,

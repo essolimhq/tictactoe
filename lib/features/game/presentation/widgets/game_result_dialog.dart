@@ -8,7 +8,7 @@ import 'package:tictactoe/core/design_system/tokens/app_sizes.dart';
 import 'package:tictactoe/core/design_system/tokens/app_spacing.dart';
 import 'package:tictactoe/features/game/domain/entities/game_status.dart';
 import 'package:tictactoe/features/game/domain/entities/player.dart';
-import 'package:tictactoe/features/game/presentation/providers/game_controller_provider.dart';
+import 'package:tictactoe/features/game/providers/game_controller_provider.dart';
 
 class GameResultDialog extends StatelessWidget {
   final GameStatus gameStatus;
@@ -22,6 +22,11 @@ class GameResultDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final text = gameStatus.isWin
+        ? winner.isX
+            ? "Victoire du Joueur X"
+            : "Victoire du joueur O"
+        : "Match nul";
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
       child: Dialog(
@@ -40,10 +45,7 @@ class GameResultDialog extends StatelessWidget {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  gameStatus.isWin ? 'Victoire du joueur ${winner.symbol}' : "C'est un match nul",
-                  style: const TextStyle(fontSize: AppSizes.xl, color: AppColors.primary),
-                ),
+                Text(text, style: const TextStyle(fontSize: AppSizes.xl, color: AppColors.primary)),
                 AppSpacing.hMd,
                 ElevatedButton(
                   onPressed: () {

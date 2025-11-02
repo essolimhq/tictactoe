@@ -1,4 +1,3 @@
-import 'package:fpdart/fpdart.dart';
 import 'package:tictactoe/core/services/abstracts/storage.dart';
 import 'package:tictactoe/features/game/data/constants/game_storage_keys.dart';
 import 'package:tictactoe/features/game/data/datasources/abstracts/game_state_datasource.dart';
@@ -11,36 +10,26 @@ class LocalGameSavingDataSource implements GameStateDataSource {
   LocalGameSavingDataSource(this._storage);
 
   @override
-  Future<Either<Exception, Unit>> saveGameState(GameStateModel gameState) async {
-    try {
-      final json = gameState.toJson();
-      return await _storage.write(GameStorageKey.gameState.key, json);
-    } catch (e) {
-      return left(Exception('Failed to save game state: $e'));
+  Future<void> saveGameState(GameStateModel gameState) async {
+    await _storage.write(GameStorageKey.gameState.key, gameState);
+  }
+
+  @override
+  Future<GameStateModel> loadGameState() async {
+    final json = await _storage.read(GameStorageKey.gameState.key);
+    if (json == null) {
+      throw Exception('No saved game state found');
     }
+    return GameStateModel.fromJson(json);
   }
 
   @override
-  Future<Either<Exception, Option<GameStateModel>>> loadGameState() async {
-    return (await _storage.read<Map<dynamic, dynamic>>(GameStorageKey.gameState.key)).fold(
-      (error) => left(error),
-      (optionJson) {
-        try {
-          return right(
-            optionJson.map((json) {
-              final jsonMap = Map<String, dynamic>.from(json);
-              return GameStateModel.fromJson(jsonMap);
-            }),
-          );
-        } catch (e) {
-          return left(Exception('Failed to parse game state: $e'));
-        }
-      },
-    );
-  }
-
-  @override
-  Future<Either<Exception, Unit>> deleteGameState() async {
+  Future<void> deleteGameState() async {
     return await _storage.delete(GameStorageKey.gameState.key);
+  }
+
+  @override
+  Future<bool> isSavedGameExist() async {
+    return await _storage.exists(GameStorageKey.gameState.key);
   }
 }

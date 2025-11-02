@@ -7,9 +7,9 @@ abstract class GameStatus with _$GameStatus {
   const GameStatus._();
 
   const factory GameStatus.playing() = Playing;
-  const factory GameStatus.win() = Win;
+  const factory GameStatus.hasWin() = Win;
   const factory GameStatus.isDraw() = IsDraw;
-  const factory GameStatus.menu() = Menu;
+  const factory GameStatus.inMenu() = Menu;
 
   bool get isPlaying => this is Playing;
   bool get isWin => this is Win;

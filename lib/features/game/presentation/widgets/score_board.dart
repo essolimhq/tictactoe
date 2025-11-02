@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tictactoe/features/game/presentation/widgets/score_item.dart';
+import 'package:tictactoe/features/game/providers/game_controller_provider.dart';
 
 class ScoreBoard extends StatelessWidget {
   const ScoreBoard({
@@ -21,7 +23,7 @@ class ScoreBoard extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  const Color(0xFFDC0000).withValues(alpha: 0.3),
+                  Colors.yellow,
                   const Color(0xFFA00000).withValues(alpha: 0.3),
                 ],
               ),
@@ -31,24 +33,26 @@ class ScoreBoard extends StatelessWidget {
                 width: 1,
               ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ScoreItem(label: 'PLAYER X', score: 3),
-                Container(
-                  width: 1,
-                  height: 40,
-                  color: Colors.white24,
-                ),
-                ScoreItem(label: 'DRAWS', score: 1),
-                Container(
-                  width: 1,
-                  height: 40,
-                  color: Colors.white24,
-                ),
-                ScoreItem(label: 'PLAYER O', score: 2),
-              ],
-            ),
+            child: Consumer(builder: (context, ref, _) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ScoreItem(label: 'PLAYER X', score: ref.watch(gameControllerProvider).score.x),
+                  Container(
+                    width: 1,
+                    height: 40,
+                    color: Colors.white24,
+                  ),
+                  ScoreItem(label: 'DRAWS', score: ref.watch(gameControllerProvider).score.draw),
+                  Container(
+                    width: 1,
+                    height: 40,
+                    color: Colors.white24,
+                  ),
+                  ScoreItem(label: 'PLAYER O', score: ref.watch(gameControllerProvider).score.o),
+                ],
+              );
+            }),
           ),
         ),
       ),

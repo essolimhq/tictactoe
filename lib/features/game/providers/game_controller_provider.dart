@@ -8,10 +8,14 @@ import 'package:tictactoe/features/game/domain/entities/player.dart';
 import 'package:tictactoe/features/game/domain/entities/position.dart';
 import 'package:tictactoe/features/game/domain/entities/winning_status.dart';
 import 'package:tictactoe/features/game/domain/errors/game_errors.dart';
+import 'package:tictactoe/features/game/domain/usecases/delete_saved_game_usecase.dart';
 import 'package:tictactoe/features/game/domain/usecases/find_best_move_usecase.dart';
-import 'package:tictactoe/features/game/presentation/providers/check_winner_usecase_provider.dart';
-import 'package:tictactoe/features/game/presentation/providers/minimax_strategy_provider.dart';
-import 'package:tictactoe/features/game/presentation/providers/play_move_usecase_provider.dart';
+import 'package:tictactoe/features/game/domain/usecases/score/load_score_usecase.dart';
+import 'package:tictactoe/features/game/domain/usecases/score/update_score_usecase.dart';
+import 'package:tictactoe/features/game/providers/check_winner_usecase_provider.dart';
+import 'package:tictactoe/features/game/providers/minimax_strategy_provider.dart';
+import 'package:tictactoe/features/game/providers/play_move_usecase_provider.dart';
+import 'package:tictactoe/features/game/providers/save_game_usecase_provider.dart';
 
 part 'game_controller_provider.g.dart';
 
@@ -22,15 +26,23 @@ class GameController extends _$GameController {
     return GameState.initial();
   }
 
-  void setGameMode(GameMode mode) {
-    state = state.copyWith(gameMode: mode);
-  }
+  Future<void> start(GameMode? mode) async {
+    try {
+      final saveGameUseCase = ref.read(saveGameUseCaseProvider);
+      final loadScoreUseCase = ref.read(loadScoreUsecaseProvider);
 
-  void start(GameMode? mode) {
-    state = state.copyWith(
-      gameMode: mode ?? state.gameMode,
-      status: GameStatus.playing(),
-    );
+      final savedScore = await loadScoreUseCase();
+
+      state = state.copyWith(
+        gameMode: mode ?? state.gameMode,
+        score: savedScore,
+        status: GameStatus.playing(),
+      );
+
+      saveGameUseCase(state);
+    } catch (e) {
+      state = state.copyWith(error: e.toString());
+    }
   }
 
   void reStart() {
@@ -40,23 +52,29 @@ class GameController extends _$GameController {
     );
   }
 
-  void quit() {
+  Future<void> quit() async {
     state = GameState.initial().copyWith(
-      status: GameStatus.menu(),
+      status: Menu(),
     );
+
+    final deleteSavedGameUseCase = ref.read(deleteSavedGameUseCaseProvider);
+    await deleteSavedGameUseCase();
   }
 
-  void play(Position position) {
+  Future<void> play(Position position) async {
     if (!state.status.isPlaying) return;
-    final playMoveUseCase = ref.read(playMoveUseCaseProvider);
+
+    final moveUseCase = ref.read(playMoveUseCaseProvider);
+    final saveGameUseCase = ref.read(saveGameUseCaseProvider);
 
     HapticFeedback.lightImpact();
 
-    playMoveUseCase(state.board, position, state.currentPlayer).fold(
+    moveUseCase(state.board, position, state.currentPlayer).fold(
       (e) => _handleGameError(e),
-      (board) {
-        state = state.copyWith(board: board);
+      (updatedBoard) async {
+        state = state.copyWith(board: updatedBoard);
         _checkWinner(state.board, position, state.currentPlayer);
+        await saveGameUseCase(state);
       },
     );
   }
@@ -66,20 +84,39 @@ class GameController extends _$GameController {
     return state.board.at(position);
   }
 
+  void resumeGame(GameState savedState) {
+    state = savedState;
+  }
+
   void _checkWinner(Board board, Position position, Player player) {
     final checkWinnerUseCase = ref.read(checkWinnerUseCaseProvider);
-    final winningStatus = checkWinnerUseCase(board, position, state.currentPlayer);
+    final saveScoreUseCase = ref.read(updateScoreUseCaseProvider);
+    final checkWinnerResult = checkWinnerUseCase(board, position, state.currentPlayer);
 
-    winningStatus.when(
+    checkWinnerResult.when(
       winner: (Player winner, List<Position> winningLine) {
         HapticFeedback.heavyImpact();
         state = state.copyWith(
           winner: winner,
           winningLine: winningLine,
-          status: GameStatus.win(),
+          status: GameStatus.hasWin(),
+        );
+
+        saveScoreUseCase(winner);
+
+        state = winner.when(
+          x: () => state.copyWith(score: state.score.copyWith(x: state.score.x + 1)),
+          o: () => state.copyWith(score: state.score.copyWith(x: state.score.o + 1)),
+          none: () => state.copyWith(score: state.score.copyWith(x: state.score.draw + 1)),
         );
       },
-      draw: () => state = state.copyWith(status: GameStatus.isDraw()),
+      draw: () {
+        state = state.copyWith(
+          status: IsDraw(),
+          score: state.score.copyWith(draw: state.score.draw + 1),
+        );
+        saveScoreUseCase(Player.none());
+      },
       none: () => _switchPlayer(),
     );
   }
@@ -103,7 +140,7 @@ class GameController extends _$GameController {
     final bestMoveResult = findBestMoveUseCase(state.board, Player.o());
 
     bestMoveResult.fold(
-      (error) => null, // No valid move found
+      (error) => null,
       (bestPosition) {
         if (bestPosition.isValid) {
           play(bestPosition);
