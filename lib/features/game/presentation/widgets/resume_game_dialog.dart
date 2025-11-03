@@ -26,6 +26,7 @@ class ResumeGameDialog extends StatelessWidget {
             Text("Resume your previous game ?"),
             SizedBox(height: 24),
             ElevatedButton.icon(
+              key: const Key('resume-yes-button'),
               onPressed: () {
                 final gameController = ref.read(gameControllerProvider.notifier);
                 gameController.resumeGame(gameState);
@@ -51,6 +52,7 @@ class ResumeGameDialog extends StatelessWidget {
             ),
             SizedBox(height: 8),
             ElevatedButton.icon(
+              key: const Key('resume-no-button'),
               onPressed: () async {
                 final savedGameController = ref.read(savedGameControllerProvider.notifier);
                 await savedGameController.removeSavedGame();

@@ -47,7 +47,7 @@ class Gameboard extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final delay = (index * 50).ms;
 
-                    return BoardCell(index: index)
+                    return BoardCell(key: ValueKey('cell-$index'), index: index)
                         .animate()
                         .fadeIn(duration: 300.ms, delay: delay)
                         .scale(begin: const Offset(0.8, 0.8), delay: delay);

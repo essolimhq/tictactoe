@@ -21,9 +21,13 @@ class GameScreen extends StatelessWidget {
       builder: (context, ref, _) {
         ref.listen(
           gameControllerProvider.select((provider) => (provider.status, provider.winner)),
-          (_, state) {
+          (_, state) async {
             final (gameStatus, winner) = state;
             if (gameStatus is Win || gameStatus is IsDraw) {
+              await Future.delayed(const Duration(seconds: 1));
+
+              if (!context.mounted) return;
+
               showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -49,12 +53,6 @@ class GameScreen extends StatelessWidget {
               children: [
                 ScoreBoard(),
                 const Players(),
-                Consumer(builder: (context, ref, _) {
-                  return Text(
-                    ref.watch(gameControllerProvider).winner?.symbol ?? "",
-                    style: TextStyle(fontSize: 40, color: Colors.amber),
-                  );
-                }),
                 Spacer(),
                 const Gameboard(),
                 Row(

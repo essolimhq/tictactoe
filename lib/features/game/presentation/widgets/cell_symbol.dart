@@ -5,11 +5,9 @@ import 'package:tictactoe/features/game/domain/entities/player.dart';
 
 class CellSymbol extends StatelessWidget {
   final Player player;
-  final bool isWinningCell;
 
   const CellSymbol({
     required this.player,
-    required this.isWinningCell,
     super.key,
   });
 
@@ -19,7 +17,7 @@ class CellSymbol extends StatelessWidget {
 
     final color = player.isX ? AppColors.primary : AppColors.secondary;
 
-    var symbol = Text(
+    return Text(
       player.symbol,
       style: TextStyle(
         fontSize: 56,
@@ -38,14 +36,5 @@ class CellSymbol extends StatelessWidget {
           duration: 300.ms,
           curve: Curves.easeOutBack,
         );
-
-    if (isWinningCell) {
-      symbol = symbol
-          .animate(onPlay: (controller) => controller.repeat())
-          .shimmer(duration: 2.seconds)
-          .shake(hz: 2, offset: const Offset(2, 0));
-    }
-
-    return symbol;
   }
 }

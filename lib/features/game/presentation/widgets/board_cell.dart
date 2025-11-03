@@ -22,9 +22,9 @@ class BoardCell extends StatelessWidget {
       final player = gameController.getPlayer(Position.fromIndex(index));
 
       final isEnabled = state.status.isPlaying && player.isEmpty;
-      final isWinningCell = false;
 
       return GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: isEnabled
             ? () {
                 final position = Position.fromIndex(index);
@@ -34,15 +34,15 @@ class BoardCell extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           decoration: BoxDecoration(
-            color: isWinningCell ? AppColors.success : AppColors.gray,
+            color: AppColors.gray,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isWinningCell ? AppColors.success : AppColors.gray,
-              width: isWinningCell ? 3 : 1,
+              color: Colors.white,
+              width: 1,
             ),
           ),
           child: Center(
-            child: CellSymbol(player: player, isWinningCell: isWinningCell),
+            child: CellSymbol(player: player),
           ),
         ),
       );
