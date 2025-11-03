@@ -6,6 +6,7 @@ import 'package:tictactoe/features/game/domain/entities/player.dart';
 import 'package:tictactoe/features/game/presentation/screens/menu_screen.dart';
 import 'package:tictactoe/features/game/presentation/widgets/game_result_dialog.dart';
 import 'package:tictactoe/features/game/presentation/widgets/gameboard.dart';
+import 'package:tictactoe/features/game/presentation/widgets/players.dart';
 import 'package:tictactoe/features/game/presentation/widgets/score_board.dart';
 import 'package:tictactoe/features/game/providers/game_controller_provider.dart';
 
@@ -47,6 +48,7 @@ class GameScreen extends StatelessWidget {
             child: Column(
               children: [
                 ScoreBoard(),
+                const Players(),
                 Consumer(builder: (context, ref, _) {
                   return Text(
                     ref.watch(gameControllerProvider).winner?.symbol ?? "",

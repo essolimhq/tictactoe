@@ -11,6 +11,8 @@ part 'game_state.freezed.dart';
 
 @freezed
 abstract class GameState with _$GameState {
+  const GameState._();
+
   const factory GameState({
     required Board board,
     required Player currentPlayer,
@@ -31,4 +33,7 @@ abstract class GameState with _$GameState {
         score: Score(x: 0, o: 0, draw: 0),
         gameMode: GameMode.vsAI,
       );
+
+  String get playerXLabel => gameMode == GameMode.vsAI ? 'You' : 'Player X';
+  String get playerOLabel => gameMode == GameMode.vsAI ? 'AI' : 'Player O';
 }
